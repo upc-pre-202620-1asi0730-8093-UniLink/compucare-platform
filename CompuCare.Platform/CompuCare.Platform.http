@@ -1,0 +1,16 @@
+@CompuCare.Platform_HostAddress = http://localhost:5147
+
+GET {{CompuCare.Platform_HostAddress}}/api/v1/plans
+Accept: application/json
+
+###
+
+POST {{CompuCare.Platform_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mype.pe",
+  "password": "your-local-demo-password"
+}
+
+###
