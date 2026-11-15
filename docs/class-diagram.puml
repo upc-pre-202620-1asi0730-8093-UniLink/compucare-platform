@@ -1,0 +1,301 @@
+@startuml CompuCare.Platform Class Diagram
+
+title
+    CompuCare.Platform
+    Class Diagram (v1.0.0)
+    IAM, Companies, Subscriptions, Service Requests, Quotations, Notifications, Shared Bounded Contexts
+end title
+
+package "Shared Bounded Context" as Shared {
+    interface IEntityId<T> {
+        +Value: T
+    }
+
+    interface IAggregateRoot {
+        +DomainEvents: IReadOnlyCollection<IEvent>
+        +ClearDomainEvents(): void
+    }
+
+    abstract class AggregateRoot implements IAggregateRoot
+
+    interface IAuditableEntity {
+        +CreatedAt: DateTimeOffset?
+        +UpdatedAt: DateTimeOffset?
+    }
+
+    class Error <<record>> {
+        +Code: string
+        +Message: string
+        +Type: EErrorType
+    }
+
+    class Result<T> {
+        +IsSuccess: bool
+        +Value: T?
+        +Error: Enum?
+        +DomainError: Error
+    }
+
+    interface IBaseRepository<TEntity> {
+        +AddAsync(TEntity entity): Task
+        +FindByIdAsync(int id): Task<TEntity?>
+        +FindByIdAsNoTrackingAsync(int id): Task<TEntity?>
+        +ListAsNoTrackingAsync(): Task<IEnumerable<TEntity>>
+    }
+
+    interface IUnitOfWork {
+        +CompleteAsync(): Task
+    }
+}
+
+package "IAM Bounded Context" as Iam {
+    class User <<Aggregate Root>> {
+        +Id: UserId
+        +CompanyId: int?
+        +Name: string
+        +Email: string
+        +PasswordHash: string
+        +Role: string
+        +Phone: string
+        +Position: string
+        +Active: bool
+        +UpdateProfile(name, phone): User
+        +UpdatePasswordHash(passwordHash): User
+    }
+
+    class PasswordResetToken <<Aggregate Root>> {
+        +Id: PasswordResetTokenId
+        +UserId: int
+        +TokenHash: string
+        +ExpiresAt: DateTime
+        +UsedAt: DateTime?
+        +IsUsable: bool
+        +Consume(): void
+    }
+
+    class UserRoles <<static>> {
+        +SystemAdministrator: "sysadmin"
+        +Technician: "technician"
+        +Administrator: "admin"
+        +CompanyManager: "company_manager"
+        +Employee: "employee"
+    }
+
+    interface IIamContextFacade <<ACL>>
+    class AuthenticatedUser <<Published Language>> {
+        +UserId: int
+        +Role: string
+        +CompanyId: int?
+    }
+}
+
+package "Companies Bounded Context" as Companies {
+    class Company <<Aggregate Root>> {
+        +Id: CompanyId
+        +Name: string
+        +TaxId: string
+    }
+
+    class Location <<Aggregate Root>> {
+        +Id: LocationId
+        +CompanyId: int
+        +Name: string
+        +Desk: string
+        +Active: bool
+        +Rename(name, desk): Location
+        +SetActive(active): Location
+    }
+
+    class Equipment <<Aggregate Root>> {
+        +Id: EquipmentId
+        +CompanyId: int
+        +Code: string
+        +Name: string
+        +SerialNumber: string
+        +Type: string
+        +LocationId: int?
+        +AssignedEmployeeId: int?
+        +AssignTo(employeeId, employeeBelongsToCompany): Equipment
+        +Unassign(): Equipment
+    }
+
+    class EquipmentAssignment <<Entity>> {
+        +Id: int
+        +EmployeeId: int?
+        +AssignedAt: DateTime
+    }
+
+    enum EEquipmentStatus {
+        Operational
+        InRepair
+    }
+
+    interface ICompaniesContextFacade <<ACL>>
+}
+
+package "Subscriptions Bounded Context" as Subscriptions {
+    class Plan <<Aggregate Root>> {
+        +Id: PlanId
+        +Code: string
+        +Name: string
+        +Price: decimal
+        +Hours: decimal
+        +PreventiveVisits: int
+    }
+
+    class Subscription <<Aggregate Root>> {
+        +Id: SubscriptionId
+        +CompanyId: int
+        +PlanId: PlanId
+        +MonthlyHours: decimal
+        +UsedHours: decimal
+        +PreventiveTotal: int
+        +PreventiveUsed: int
+        +StartedAt: DateTime
+        +RenewsAt: DateTime
+        +Version: Guid
+        +Renew(plan): Subscription
+        +Consume(serviceRequestId, hours): bool
+        +BookPreventive(): Subscription
+    }
+
+    class CoverageConsumption <<Entity>> {
+        +Id: int
+        +ServiceRequestId: int
+        +PeriodStartedAt: DateTime
+        +Hours: decimal
+    }
+
+    class MaintenanceVisit <<Aggregate Root>> {
+        +Id: MaintenanceVisitId
+        +CompanyId: int
+        +SubscriptionId: SubscriptionId
+        +Date: string
+        +Time: string
+        +EquipmentIds: List<int>
+        +Status: string
+    }
+
+    interface ISubscriptionsContextFacade <<ACL>>
+}
+
+package "Service Requests Bounded Context" as ServiceRequests {
+    class ServiceRequest <<Aggregate Root>> {
+        +Id: ServiceRequestId
+        +CompanyId: int
+        +EquipmentId: int
+        +RequesterId: int
+        +TechnicianId: int?
+        +Category: string
+        +Description: string
+        +Diagnosis: string
+        +WorkDone: string
+        +Status: EServiceRequestStatus
+        +Paused: bool
+        +WorkHours: decimal
+        +AssignTo(technicianId): void
+        +StartDiagnosis(technicianId): void
+        +Resolve(technicianId, hours, hasUnresolvedQuotations, diagnosis, workDone): void
+        +Cancel(requesterId): void
+        +SetPaused(paused): void
+    }
+
+    class TimelineEntry <<Entity>> {
+        +Id: int
+        +Status: EServiceRequestStatus
+        +At: DateTime
+    }
+
+    enum EServiceRequestStatus {
+        PendingAssignment
+        Assigned
+        InDiagnosis
+        Resolved
+        Cancelled
+    }
+
+    interface IServiceRequestsContextFacade <<ACL>>
+}
+
+package "Quotations Bounded Context" as Quotations {
+    class Quotation <<Aggregate Root>> {
+        +Id: QuotationId
+        +ServiceRequestId: int
+        +CompanyId: int
+        +TechnicianId: int
+        +Total: decimal
+        +Status: EQuotationStatus
+        +PaidAt: DateTime?
+        +Receipt: string?
+        +Approve(): void
+        +Reject(): void
+        +RecordSimulatedPayment(): void
+    }
+
+    class QuotationLine <<Entity>> {
+        +Id: int
+        +Description: string
+        +Cost: decimal
+    }
+
+    enum EQuotationStatus {
+        Pending
+        Approved
+        Rejected
+        PaidSimulated
+    }
+
+    interface IQuotationsContextFacade <<ACL>>
+}
+
+package "Notifications Bounded Context" as Notifications {
+    class Notification <<Aggregate Root>> {
+        +Id: NotificationId
+        +UserId: int
+        +Message: string
+        +Read: bool
+        +MarkAsRead(): Notification
+    }
+
+    interface INotificationsContextFacade <<ACL>>
+}
+
+' Inheritance from the shared kernel
+AggregateRoot <|-- User
+AggregateRoot <|-- PasswordResetToken
+AggregateRoot <|-- Company
+AggregateRoot <|-- Location
+AggregateRoot <|-- Equipment
+AggregateRoot <|-- Plan
+AggregateRoot <|-- Subscription
+AggregateRoot <|-- MaintenanceVisit
+AggregateRoot <|-- ServiceRequest
+AggregateRoot <|-- Quotation
+AggregateRoot <|-- Notification
+IAuditableEntity <|.. User
+IAuditableEntity <|.. ServiceRequest
+IAuditableEntity <|.. Quotation
+IAuditableEntity <|.. Notification
+
+' Aggregate composition
+Equipment "1" *-- "0..*" EquipmentAssignment
+Subscription "1" *-- "0..*" CoverageConsumption
+Subscription --> Plan : PlanId
+MaintenanceVisit --> Subscription : SubscriptionId
+ServiceRequest "1" *-- "1..*" TimelineEntry
+ServiceRequest --> EServiceRequestStatus
+Quotation "1" *-- "1..50" QuotationLine
+Quotation --> EQuotationStatus
+
+' Cross-context collaboration through facades (ids only)
+User ..> ICompaniesContextFacade : registers company
+User ..> ISubscriptionsContextFacade : activates plan
+Equipment ..> IIamContextFacade : employee of company
+ServiceRequest ..> ICompaniesContextFacade : equipment of requester
+ServiceRequest ..> IQuotationsContextFacade : unresolved quotations
+ServiceRequest ..> ISubscriptionsContextFacade : consume hours
+ServiceRequest ..> INotificationsContextFacade : notify
+Quotation ..> IServiceRequestsContextFacade : quotable ticket / pause
+Quotation ..> INotificationsContextFacade : notify
+
+@enduml

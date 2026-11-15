@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="OperationCancelled" xml:space="preserve">
+    <value>The operation was cancelled.</value>
+  </data>
+  <data name="GenericError" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="DatabaseError" xml:space="preserve">
+    <value>A database error occurred while processing your request.</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>An internal server error occurred.</value>
+  </data>
+  <data name="ExternalServiceError" xml:space="preserve">
+    <value>A service required to complete this request is unavailable.</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>The specified user was not found.</value>
+  </data>
+  <data name="EmailAlreadyRegistered" xml:space="preserve">
+    <value>The email is already registered.</value>
+  </data>
+  <data name="CompanyTaxIdAlreadyRegistered" xml:space="preserve">
+    <value>The company RUC is already registered.</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>Invalid email or password.</value>
+  </data>
+  <data name="InvalidUserData" xml:space="preserve">
+    <value>The name or email provided is invalid.</value>
+  </data>
+  <data name="InvalidRegistrationData" xml:space="preserve">
+    <value>Company, RUC (11 digits) and administrator information are required.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>The password must contain at least six characters.</value>
+  </data>
+  <data name="CurrentPasswordMismatch" xml:space="preserve">
+    <value>The current password does not match.</value>
+  </data>
+  <data name="PlanNotFound" xml:space="preserve">
+    <value>The selected plan was not found.</value>
+  </data>
+  <data name="InvalidPaymentData" xml:space="preserve">
+    <value>Only a fictitious cardholder and four test digits are allowed.</value>
+  </data>
+  <data name="InvalidResetToken" xml:space="preserve">
+    <value>The reset token is invalid or expired.</value>
+  </data>
+  <data name="UserUpdateForbidden" xml:space="preserve">
+    <value>You cannot modify another user's account.</value>
+  </data>
+  <data name="EmailDeliveryUnavailable" xml:space="preserve">
+    <value>Email delivery is not configured.</value>
+  </data>
+  <data name="InvalidCompanyData" xml:space="preserve">
+    <value>The company name or RUC is invalid.</value>
+  </data>
+  <data name="LocationNotFound" xml:space="preserve">
+    <value>The specified location was not found.</value>
+  </data>
+  <data name="InvalidLocationData" xml:space="preserve">
+    <value>The site and desk are required.</value>
+  </data>
+  <data name="DuplicateLocation" xml:space="preserve">
+    <value>The company already has a location with this site and desk.</value>
+  </data>
+  <data name="EquipmentNotFound" xml:space="preserve">
+    <value>The specified equipment was not found.</value>
+  </data>
+  <data name="InvalidEquipmentData" xml:space="preserve">
+    <value>The name, serial number and type are required.</value>
+  </data>
+  <data name="DuplicateSerialNumber" xml:space="preserve">
+    <value>A device with this serial number already exists.</value>
+  </data>
+  <data name="LocationUnavailable" xml:space="preserve">
+    <value>The selected location does not belong to the company or is inactive.</value>
+  </data>
+  <data name="EmployeeNotInCompany" xml:space="preserve">
+    <value>Equipment must be assigned to an active employee of its company.</value>
+  </data>
+  <data name="SubscriptionNotFound" xml:space="preserve">
+    <value>The company has no active subscription.</value>
+  </data>
+  <data name="InvalidBillingData" xml:space="preserve">
+    <value>Valid billing details are required.</value>
+  </data>
+  <data name="InvalidMaintenanceData" xml:space="preserve">
+    <value>A valid date, time and non-duplicated list of devices are required.</value>
+  </data>
+  <data name="MaintenanceDateInPast" xml:space="preserve">
+    <value>The maintenance date cannot be in the past.</value>
+  </data>
+  <data name="MaintenanceEquipmentNotInCompany" xml:space="preserve">
+    <value>All selected devices must belong to your company.</value>
+  </data>
+  <data name="SubscriptionExpired" xml:space="preserve">
+    <value>The subscription period has expired. Renew it first.</value>
+  </data>
+  <data name="NoPreventiveVisitsLeft" xml:space="preserve">
+    <value>No preventive visits left in this period.</value>
+  </data>
+  <data name="ServiceRequestNotFound" xml:space="preserve">
+    <value>The specified ticket was not found.</value>
+  </data>
+  <data name="InvalidServiceRequestData" xml:space="preserve">
+    <value>A category and a description of at least ten characters are required.</value>
+  </data>
+  <data name="EquipmentNotAssignedToRequester" xml:space="preserve">
+    <value>This device is not assigned to you.</value>
+  </data>
+  <data name="TechnicianNotFound" xml:space="preserve">
+    <value>The specified technician was not found.</value>
+  </data>
+  <data name="InvalidStatusTransition" xml:space="preserve">
+    <value>The ticket does not allow this operation in its current status.</value>
+  </data>
+  <data name="InvalidResolutionData" xml:space="preserve">
+    <value>Positive work hours, a diagnosis and the completed work are required.</value>
+  </data>
+  <data name="UnresolvedQuotations" xml:space="preserve">
+    <value>Required quotations must be resolved before completing a ticket.</value>
+  </data>
+  <data name="SubscriptionRequired" xml:space="preserve">
+    <value>An active subscription is required to complete tickets.</value>
+  </data>
+  <data name="SupportHoursAlreadyRegistered" xml:space="preserve">
+    <value>Support hours have already been registered for this ticket.</value>
+  </data>
+  <data name="InsufficientSupportHours" xml:space="preserve">
+    <value>Insufficient support hours in the current subscription period.</value>
+  </data>
+  <data name="QuotationNotFound" xml:space="preserve">
+    <value>The specified quotation was not found.</value>
+  </data>
+  <data name="QuotationNotAllowed" xml:space="preserve">
+    <value>Quotations are not permitted in the ticket's current state.</value>
+  </data>
+  <data name="InvalidQuotationData" xml:space="preserve">
+    <value>Between 1 and 50 items with a description and a positive cost are required.</value>
+  </data>
+  <data name="InvalidQuotationStatus" xml:space="preserve">
+    <value>Only APPROVED or REJECTED are allowed.</value>
+  </data>
+  <data name="QuotationNotPending" xml:space="preserve">
+    <value>Only a pending quotation can be approved or rejected.</value>
+  </data>
+  <data name="QuotationNotApproved" xml:space="preserve">
+    <value>Only approved quotations accept simulated payment.</value>
+  </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>The specified notification was not found.</value>
+  </data>
+</root>

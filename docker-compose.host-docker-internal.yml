@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=server=host.docker.internal;port=3306;user=root;password=password;database=compucare-platform
+      - TokenSettings__Secret=local-signing-secret-for-jwt-auth
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
